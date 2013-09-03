@@ -86,7 +86,7 @@
 								$year=date('Y');
 								//echo $year;
 								// But you must subtract 1 to get the correct timestamp 
-								$ts = mktime(0,0,0,$month,$day+7,$year); 
+								$ts = mktime(0,0,0,$month,$day+10,$year); 
 								
 								// So, this would then match Excel's representation: 
 								$enddate=date("Y-m-d",$ts); 
