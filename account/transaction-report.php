@@ -35,6 +35,30 @@
         	<div class="main-text-container">
                 <div class="row-container" style="width:96%; margin:0% auto; background:#e7ecf0;">
                 <table width="100%" border="0" cellspacing="5" cellpadding="5">
+                <tr>
+                	<th>
+                    	SELECT MONTH
+                    </th>
+                    <th>
+                    	<form name="filterbymonths" method="post" action="transaction-report.php">
+                        	<select name="month" onchange="document.filterbymonths.submit();">
+                            	<option value="0" selected="selected">-ALL-</option>
+                                <option value="01"<?php if(isset($_POST['month'])and($_POST['month']=="1")){ ?> selected="selected"<?php } ?>>January</option>
+                                <option value="02"<?php if(isset($_POST['month'])and($_POST['month']=="2")){ ?> selected="selected"<?php } ?>>Februarry</option>
+                                <option value="03"<?php if(isset($_POST['month'])and($_POST['month']=="3")){ ?> selected="selected"<?php } ?>>March</option>
+                                <option value="04"<?php if(isset($_POST['month'])and($_POST['month']=="4")){ ?> selected="selected"<?php } ?>>April</option>
+                                <option value="05"<?php if(isset($_POST['month'])and($_POST['month']=="5")){ ?> selected="selected"<?php } ?>>May</option>
+                                <option value="06"<?php if(isset($_POST['month'])and($_POST['month']=="6")){ ?> selected="selected"<?php } ?>>June</option>
+                                <option value="07"<?php if(isset($_POST['month'])and($_POST['month']=="7")){ ?> selected="selected"<?php } ?>>July</option>
+                                <option value="08"<?php if(isset($_POST['month'])and($_POST['month']=="8")){ ?> selected="selected"<?php } ?>>August</option>
+                                <option value="09"<?php if(isset($_POST['month'])and($_POST['month']=="9")){ ?> selected="selected"<?php } ?>>September</option>
+                                <option value="10"<?php if(isset($_POST['month'])and($_POST['month']=="10")){ ?> selected="selected"<?php } ?>>October</option>
+                                <option value="11"<?php if(isset($_POST['month'])and($_POST['month']=="11")){ ?> selected="selected"<?php } ?>>November</option>
+                                <option value="12"<?php if(isset($_POST['month'])and($_POST['month']=="12")){ ?> selected="selected"<?php } ?>>December</option>
+                            </select>
+                        </form>
+                    </th>
+                </tr>
                   <tr>
                     <th width="15%" align="center">Date</th>
                     <th width="20%" align="center">Description</th>
@@ -48,10 +72,26 @@
                  <div class="row-container" style="width:96%; margin:0.5% auto; background:#e7ecf0;">
                 <table width="100%" border="0" cellspacing="5" cellpadding="5">
                   <?php
+				  	if(isset($_POST['month']) and ($_POST['month']!="0"))
+					{
+						$startdate=date('Y')."-".$_POST['month']."-".'01';
+						$enddate=date('Y')."-".$_POST['month']."-".'31';
+						$retrieveAllTransaction="SELECT * FROM _transactions WHERE transactiondate BETWEEN '$startdate' AND '$enddate' ORDER BY id DESC";
+					}
+					elseif(isset($_POST['month']) and ($_POST['month']=="0"))
+					{
+						$startdate=date('Y')."-".$_POST['month'].'01';
+						$enddate=date('Y')."-".$_POST['month'].'31';
+						$retrieveAllTransaction="SELECT * FROM _transactions ORDER BY id DESC";
+					}
+					elseif(!isset($_POST['month']))
+					{
+						$retrieveAllTransaction="SELECT * FROM _transactions ORDER BY id DESC";
+					
+					}
 				  	$totalincome=0;
 					$totalexpence=0;
-				  	$retrieveAllTransaction="SELECT * FROM _transactions ORDER BY id DESC";
-					$allTransactionRecord=mysql_query($retrieveAllTransaction);
+				  	$allTransactionRecord=mysql_query($retrieveAllTransaction);
 					$countAllTranction=mysql_num_rows($allTransactionRecord);
 					if($countAllTranction>0)
 					{

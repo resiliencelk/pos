@@ -223,7 +223,7 @@
                                 <div class="text">
                                 		<tr>
                                         	<td align="center" style="padding:0%; margin:0% 2px 0% 0%; border-bottom:solid 1px #CCCCCC; text-align:center;">
-                                            	<a href="../cheque/issuecheque.php?chequeno=<?php echo $overdueincomeDatas['invoiceid'];?>&action=Edit" title="<?php echo $overdueincomeDatas['customername'];?>"><?php echo $overdueincomeDatas['invoiceid'];?></a>
+                                            	<a href="../invoice/credit-invoice.php?invoiceid=<?php echo $overdueincomeDatas['invoiceid'];?>&action=Edit" title="<?php echo $overdueincomeDatas['customername'];?>"><?php echo $overdueincomeDatas['invoiceid'];?></a>
                                             </td>
                                             <td align="right" style="padding:-5px 0% 0% 0%; margin:0%; border-bottom:solid 1px #CCCCCC; text-align:right;">
                                             	<?php echo $overdueincomeDatas['balance'];?>

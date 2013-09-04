@@ -614,3 +614,18 @@ CREATE TABLE IF NOT EXISTS _receivecheques
 	createddate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (id,chequeno)	
 );
+
+CREATE TABLE IF NOT EXISTS `_creditinvoice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoiceid` varchar(500) NOT NULL,
+  `invoicedate` varchar(12) NOT NULL,
+  `customername` varchar(500) NOT NULL,
+  `customeraddress` varchar(500) DEFAULT NULL,
+  `customertelnumber` varchar(15) DEFAULT NULL,
+  `tobepaid` decimal(8,2) DEFAULT NULL,
+  `thispayment` decimal(8,2) DEFAULT NULL,
+  `balance` decimal(8,2) DEFAULT NULL,
+  `status` char(1) DEFAULT 'A',
+  `createddate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
