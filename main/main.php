@@ -90,7 +90,8 @@
 								
 								// So, this would then match Excel's representation: 
 								$enddate=date("Y-m-d",$ts); 
-
+								
+								
 								echo "Rs. ".number_format($dabasehandle->_getInfo("SELECT SUM(amount) AS amount FROM _issuecheque WHERE status='1' AND chequedate BETWEEN '$today' AND '$enddate' ORDER BY chequedate ASC","amount"),2,".",",");
         
                             ?>
@@ -118,9 +119,20 @@
 								{
 									while($reminderDatas=mysql_fetch_array($chequeReminderRecords))
 									{
+										$chequedate=$reminderDatas['chequedate'];
+										
+										$startTimeStamp = strtotime("$today");
+										$endTimeStamp = strtotime("$chequedate");
+
+										$timeDiff = abs($endTimeStamp - $startTimeStamp);
+
+										$numberDays = $timeDiff/86400;  // 86400 seconds in one day
+
+										// and you might want to convert to integer
+										$numberDays = intval($numberDays);
 								?>
                                 <div class="click">
-                                		<tr>
+                                		<tr title="<?php echo $numberDays; ?> days more">
                                         	<td align="center" style="padding:0%; margin:0%; border-bottom:solid 1px #CCCCCC; text-align:center;">
                                             	<a href="../cheque/issuecheque.php?chequeno=<?php echo $reminderDatas['chequeno'];?>&action=Edit"><?php echo $reminderDatas['chequeno'];?></a>
                                             </td>
@@ -213,7 +225,7 @@
                                         	<td align="center" style="padding:0%; margin:0% 2px 0% 0%; border-bottom:solid 1px #CCCCCC; text-align:center;">
                                             	<a href="../cheque/issuecheque.php?chequeno=<?php echo $overdueincomeDatas['invoiceid'];?>&action=Edit" title="<?php echo $overdueincomeDatas['customername'];?>"><?php echo $overdueincomeDatas['invoiceid'];?></a>
                                             </td>
-                                                                                        <td align="center" style="padding:-5px 0% 0% 0%; margin:0%; border-bottom:solid 1px #CCCCCC; text-align:center;">
+                                            <td align="right" style="padding:-5px 0% 0% 0%; margin:0%; border-bottom:solid 1px #CCCCCC; text-align:right;">
                                             	<?php echo $overdueincomeDatas['balance'];?>
                                             </td>
                                             
