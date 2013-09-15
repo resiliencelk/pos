@@ -20,6 +20,7 @@
 <link rel="icon" href="images/logo-gmail.jpg" title="RESILIENCE INFORMATION SOLUTIONS" />
 <title>Resilience POS System</title>
 <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+
 </head>
 <body>
 <div id="main-container">
@@ -78,20 +79,19 @@
                         <!-- end of row-container!-->
                     <div class="row-container">
                         <div class="reminder">
-                        	<div class="system-heading" style="text-align:center; border-bottom:1px dashed #CCC; margin-bottom:3px;">
+                        	<div class="system-heading" style="text-align:center; border-bottom:1px dashed #CCC; margin-bottom:3px; font-size:18px; font-weight:bold;">
                             Cheque Reminders - <?php
 								$today=date('Y'.'-'.'m'.'-'.'d');
 								$day= date('d');
 								$month=date('m');
 								$year=date('Y');
-								//echo $year;
+
 								// But you must subtract 1 to get the correct timestamp 
 								$ts = mktime(0,0,0,$month,$day+10,$year); 
 								
 								// So, this would then match Excel's representation: 
 								$enddate=date("Y-m-d",$ts); 
-								
-								
+													
 								echo "Rs. ".number_format($dabasehandle->_getInfo("SELECT SUM(amount) AS amount FROM _issuecheque WHERE status='1' AND chequedate BETWEEN '$today' AND '$enddate' ORDER BY chequedate ASC","amount"),2,".",",");
         
                             ?>
@@ -159,10 +159,7 @@
                         <!-- end of row container!-->
                     </div>
                     <div class="row-container" style="margin-top:10px;box-shadow:0 10px 10px -10px #555;">
-                    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                          <tr>
-                            <td width="50%"><div class="over-due-ex">over due (Owing)<br/> <b>Rs. 50,000.00</b></div></td>
-                            <td width="50%"><div class="over-due-in">over due (Payable)<br/><b> <?php
+                    	<div class="over-due-in">over due (Payable)<b> <?php
 								$today=date('Y'.'-'.'m'.'-'.'d');
 								$day= date('d');
 								$month=date('m');
@@ -174,32 +171,14 @@
 								// So, this would then match Excel's representation: 
 								$lastdate=date("Y-m-d",$ts); 
 
-								echo "Rs. ".number_format($dabasehandle->_getInfo("SELECT SUM(balance) AS balance FROM _invoice WHERE paymentmode=3 AND balance!=0 ORDER BY invoicedate ASC","balance"),2,".",",");
+								echo "Rs. ".number_format($dabasehandle->_getInfo("SELECT SUM(balance) AS balance FROM _invoice WHERE paymentmode=3 AND balance!=0 ORDER BY invoicedate DESC","balance"),2,".",",");
         
-                            ?></b></div></td>
-                          </tr>
-                          <tr>
-                            <td>
-                            <div class="over-due-text" id="style-3" style="overflow-y:scroll;">
-                                <div class="text">
-                                	Display here
-                                </div>
-                                <div class="text">
-                                	Display here
-                                </div>
-                                <div class="text">
-                                	Display here
-                                </div>
-                                <div class="text">
-                                	Display here
-                                </div>
+                            ?></b>
                             </div>
-                            </td>
-                            <td>
+                            
                             <div class="over-due-text" id="style-3" style="overflow-y:scroll;">
                                 <table border="0" width="100%" cellpadding="0" cellspacing="0" align="center" style="padding:0%; margin-top:-1px;">
-                                
-<?php
+                                <?php
 								$today=date('Y'.'-'.'m'.'-'.'d');
 								$day= date('d');
 								$month=date('m');
@@ -211,7 +190,7 @@
 								// So, this would then match Excel's representation: 
 								$lastdate=date("Y-m-d",$ts); 
 
-								$sqlOverdueIncome="SELECT * FROM _invoice WHERE paymentmode=3 AND balance!=0 ORDER BY invoicedate ASC";
+								$sqlOverdueIncome="SELECT *,SUM(balance) AS total FROM _invoice WHERE paymentmode=3 AND balance!=0 GROUP BY(customerid) ORDER BY id DESC"; //"SELECT * FROM _invoice WHERE paymentmode=3 AND balance!=0 ORDER BY id DESC";
                                 //echo $sqlOverdueIncome;
 								$overDueIncomeRecords=mysql_query($sqlOverdueIncome);
 								$countOverdueIncome=mysql_num_rows($overDueIncomeRecords);
@@ -222,13 +201,16 @@
 								?>
                                 <div class="text">
                                 		<tr>
-                                        	<td align="center" style="padding:0%; margin:0% 2px 0% 0%; border-bottom:solid 1px #CCCCCC; text-align:center;">
-                                            	<a href="../invoice/credit-invoice.php?invoiceid=<?php echo $overdueincomeDatas['invoiceid'];?>&action=Edit" title="<?php echo $overdueincomeDatas['customername'];?>"><?php echo $overdueincomeDatas['invoiceid'];?></a>
+                                        	<td align="left" style="padding:0%; margin:0% 2px 0% 0%; border-bottom:solid 1px #CCCCCC; text-align:left;">
+                                            	<a href="customer-summary.php?invoiceid=<?php echo $overdueincomeDatas['customerid'];?>&action=View"><?php echo $overdueincomeDatas['customerid']."-". $overdueincomeDatas['customername'];?></a>
                                             </td>
                                             <td align="right" style="padding:-5px 0% 0% 0%; margin:0%; border-bottom:solid 1px #CCCCCC; text-align:right;">
-                                            	<?php echo $overdueincomeDatas['balance'];?>
+                                            	<a href="#openModal"><?php echo"Rs. ".number_format($overdueincomeDatas['total'],2,".",",");?></a>
+                                                <?php require("../model.php"); ?>
                                             </td>
-                                            
+                                            <!--<td align="right" style="padding:-5px 0% 0% 0%; margin:0%; border-bottom:solid 1px #CCCCCC; text-align:right;">
+                                            	<a href="../invoice/credit-invoice.php?invoiceid=<?php //echo $overdueincomeDatas['invoiceid'];?>&action=Edit">Pay</a><?php //echo"Rs. ".number_format($overdueincomeDatas['total'],2,".",",");?>
+                                            </td>!-->
                                         </tr>
                                     
                                 </div>
@@ -237,16 +219,28 @@
 								}
 							   ?>
                                </table>
-                                
                             </div>
-                            </td>
-                          </tr>
-                        </table>
+                         </div>
+                         
+                         <div class="row-container" style="margin-top:10px;box-shadow:0 10px 10px -10px #555;">
+                            <div class="over-due-ex">
+                            	over due (Owing) <b>Rs. 50,000.00</b>
                             </div>
-                            
-                            </td>
-                          </tr>
-                        </table>
+                            <div class="over-due-text" id="style-3" style="overflow-y:scroll;">
+                                <div class="text">
+                                	Display here
+                                </div>
+                                <div class="text">
+                                	Display here
+                                </div>
+                                <div class="text">
+                                	Display here
+                                </div>
+                                <div class="text">
+                                	Display here
+                                </div>
+                            </div>
+                         </div>
                     </div>
                     <!-- end of dash-left-colum!-->
                 </div>

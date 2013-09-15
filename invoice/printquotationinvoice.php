@@ -236,7 +236,7 @@ if(isset($_GET['invoiceid'])){
        
         <!-- footer row !-->
         <div class="footerrow">
-        	<?php echo "Rs.".number_format($headerdatas['nettotal'],2,',',','); ?>
+        	<?php echo "Rs.".number_format($headerdatas['nettotal'],2,'.',','); ?>
         </div>
          
     </div>

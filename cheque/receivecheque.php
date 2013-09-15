@@ -153,7 +153,7 @@ function delete_records()
                       <tr style="color:#333; font-weight:normal;">
                         <th width="4%" align="center">No</th>
                         <th width="12%" align="center">Cheque No</th>
-                        <th width="12%" align="center">Cheque Date</th>
+                        <th width="12%" align="center">Cheque Date  (Y-M-D)</th>
                         <th width="14%" align="center">Original Amount</th>
                         <th width="10%" align="center">Amount</th>
                         <th width="12%" align="center">Type</th>

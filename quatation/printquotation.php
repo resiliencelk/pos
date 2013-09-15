@@ -198,7 +198,7 @@ if(isset($_GET['quotationid'])){
 					$month=1;
 					$year=$year+1;
 				}
-				echo $day."/".$month."/".$year;
+				echo $year."-".$month."-".$day;
 				?>
             </div>
         </div>
@@ -240,7 +240,7 @@ if(isset($_GET['quotationid'])){
                     <?php echo $itemdatas['quantity']; ?>
                 </div>
                 <div class="unitprice">
-                    <?php echo "Rs.".number_format($itemdatas['unitprice'],2,',',','); ?>
+                    <?php echo "Rs.".number_format($itemdatas['unitprice'],2,'.',','); ?>
                 </div>
                 <div class="totalamount">
                     <?php //echo "Rs.".number_format($itemdatas['total'],2,',',','); ?>
@@ -254,7 +254,7 @@ if(isset($_GET['quotationid'])){
        
         <!-- footer row !-->
         <div class="footerrow">
-        	<?php echo "Rs.".number_format($headerdatas['nettotal'],2,',',','); ?>
+        	<?php echo "Rs.".number_format($headerdatas['nettotal'],2,'.',','); ?>
         </div>
          
         <div class="footerrow">

@@ -4,9 +4,9 @@ session_start();
 
 class _handledatabase{
 	public $server="localhost";
-	public $username="root";//"resilie3_admin";
-	public $password="root";//"QXAWS75RT87";
-	public $database="resiliencepos";//"resilie3_pos";
+	public $username="resilie3_admin";//"resilie3_admin";
+	public $password="QXAWS75RT87";//"QXAWS75RT87";
+	public $database="resilie3_pos";//"resilie3_pos";
 	public $connection;
 	public $genNumber;
 	

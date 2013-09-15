@@ -79,72 +79,7 @@
         	<!-- right-colummn row start here !-->
         	<div class="main-text-container">
             	<!-- main-text-container row start here !-->
-                <div class="row-container">
-                    <?php
-                    if(isset($_POST['saveitems']))
-                    {
-                        echo "can save items";
-                        if(isset($_POST['invoicenumber'])){$invoicenumber=$_POST['invoicenumber'];}
-                        
-                        if(isset($_POST['invoicenumber'])){$_SESSION['invoicenumber']=$_POST['invoicenumber'];}
-                        
-                        
-                        if(isset($_POST['itemid'])){$itemid=$_POST['itemid'];}
-                        if(isset($_POST['modelno'])){$modelno=$_POST['modelno'];}
-                        if(isset($_POST['serialno'])){$serialno=$_POST['serialno'];}
-                        if(isset($_POST['description'])){$description=$_POST['description'];}
-                        if(isset($_POST['quantity'])){$quantity=$_POST['quantity'];}
-                        if(isset($_POST['salesprice'])){$salesprice=$_POST['salesprice'];}
-                        if(isset($_POST['totalprice'])){$totalprice=$_POST['totalprice'];}
-                        
-                        $dabasehandle->_invisibleRecordInsertion("INSERT INTO _invoiceitems (invoiceid,itemid,modelnumber,serialnumber,description,quantity,unitprice,total) VALUES('$invoicenumber','$itemid','$modelno','$serialno','$description','$quantity','$salesprice','$totalprice')");
-						
-						$availableitemquantity=$dabasehandle->_getInfo("SELECT quantity FROM _stockitems WHERE itemid='$itemid'",'quantity');
-		echo "quantity is".$availableitemquantity;
-		$actualitemquantity=($availableitemquantity-$quantity);
-		$dabasehandle->_invisibleRecordInsertion("UPDATE _stockitems SET quantity='$actualitemquantity' WHERE itemid='$itemid'");
-		
-		
-                        unset($_SESSION['catagory']);
-                        unset($_SESSION['itemid']);
-                        unset($_SESSION['modelnumber']);
-                        unset($_SESSION['itemname']);
-                        unset($_SESSION['warranty']);
-                        unset($_SESSION['salesprice']);
-                    }
-                    
-                    if(isset($_POST['saveandprint']))
-                    {
-                        if(isset($_POST['invoicenumber'])){$invoicenumber=$_POST['invoicenumber'];}
-                        if(isset($_POST['invoicedate'])){$invoicedate=$_POST['invoicedate'];}
-                        if(isset($_POST['pymode'])){$pymode=$_POST['pymode'];}
-                        if(isset($_POST['status'])){$status=$_POST['status'];}
-                        
-                        if(isset($_POST['customerid'])){$customerid=$_POST['customerid'];}
-                        if(isset($_POST['name'])){$name=$_POST['name'];}
-                        if(isset($_POST['address'])){$address=$_POST['address'];}
-                        if(isset($_POST['contactnumber'])){$contactnumber=$_POST['contactnumber'];}
-                        
-                        if(isset($_POST['nettotal'])){$nettotal=$_POST['nettotal'];}
-                        if(isset($_POST['discouts'])){$discouts=$_POST['discouts'];}
-                        if(isset($_POST['grandtotal'])){$grandtotal=$_POST['grandtotal'];}
-                        if(isset($_POST['status'])){$status=$_POST['status'];}
-                        
-                        
-                        $dabasehandle->_invisibleRecordInsertion("INSERT INTO _invoice (invoiceid,invoicedate,paymentmode,customerid,customername,customeraddress,customertelnumber,nettotal,discounts,vat,grandtotal,status) VALUES('$invoicenumber','$invoicedate','$pymode','$customerid','$name','$address','$contactnumber','$nettotal','$discouts','0','$grandtotal','$status')");
-						
-						echo $pymode;
-						
-						if($pymode=="1"||$pymode==1)
-                        {
-						$dabasehandle->_invisibleRecordInsertion("INSERT INTO  _transactions (transactiondate,description,amount,catagory,account) VALUES('$invoicedate','$invoicenumber','$grandtotal','1','$pymode')");
-						}
-						
-						
-                       header("location:printinvoice.php?invoiceid=$invoicenumber","_blank");
-                    }
-                    ?>
-        		</div>
+                
     			<!-- end of message row !-->
                     <div class="row-container">
                     <!-- 2nd row !-->
@@ -153,6 +88,7 @@
                         <td width="32%" class="invoice-menu effect6" style="border:solid 1px #d2d2d2;"><a href="view-invoice.php?invoice=sales">Sales Invoice</a></td>
                         <td width="32%" class="invoice-menu effect6" style="border:solid 1px #d2d2d2;"><a href="view-invoice.php?invoice=service">Service Invoice</a></td>
                         <td width="32%" class="invoice-menu effect6" style="border:solid 1px #d2d2d2;"><a href="view-invoice.php?invoice=quotation">Quotation Invoice</a></td>
+                        <td width="32%" class="invoice-menu effect6" style="border:solid 1px #d2d2d2;"><a href="view-invoice.php?invoice=credit">Credit Invoice</a></td>
                       </tr>
                     </table>
                     </div>
@@ -162,7 +98,7 @@
 
                     <div class="row-container" style="margin-top:10px; background:#FFF;">
                     	<?php
-							if(isset($_GET['invoice']) and ($_GET['invoice']=='sales'))
+							if(isset($_GET['invoice']) and (($_GET['invoice']=='sales')))
 							{
 						?>		
                         		<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #CCC;">
@@ -207,7 +143,52 @@
 									
                                 </table>
 						<?php		
-							}elseif(isset($_GET['invoice']) and ($_GET['invoice']=='service'))
+							}
+							elseif(isset($_GET['invoice']) and($_GET['invoice']=='credit'))
+							{
+							?>
+                            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #CCC;">
+                                	<tr style="background:url(../images/table-bg.jpg); background-repeat:repeat-x; height:30px;">
+                                    	<th align="center"><div class="table-heading">Invoice ID</div></th>
+                                        <th align="center"><div class="table-heading">Invoice Date</div></th>
+                                        <th align="center"><div class="table-heading">Customer Name</div></th>
+                                        <th align="center"><div class="table-heading">Contact Number</div></th>
+                                        <th align="right"><div class="table-heading">To be paid</div></th>
+                                        <th align="right"><div class="table-heading">padid Amounts</div></th>
+                                        <th align="right"><div class="table-heading">Balance</div></th>
+                                        <th align="center"><div class="table-heading">Status</div></th>
+                                        <th align="center" colspan="3"><div class="table-heading">Action</div></th>
+                                    </tr>
+                  <?php
+										$salesinvoice="SELECT * FROM _creditinvoice ORDER BY id DESC";
+										$salesinvoicerecord=mysql_query($salesinvoice);
+										$countsalesinvoice=mysql_num_rows($salesinvoicerecord);
+										if($countsalesinvoice>0)
+										{
+											while($salesinvoicedata=mysql_fetch_array($salesinvoicerecord))
+											{
+									?>
+                                    	<tr class="border">
+                                        	<td align="center"><?php echo $salesinvoicedata['invoiceid']; ?></td>
+                                            <td align="center"><?php echo $salesinvoicedata['invoicedate']; ?></td>
+                                            <td align="center"><?php echo $salesinvoicedata['customername']; ?></td>
+                                            <td align="center"><?php echo $salesinvoicedata['customertelnumber']; ?></td>
+                                            <td align="right">Rs. <?php echo $salesinvoicedata['tobepaid']; ?></td>
+                                            <td align="right">Rs. <?php echo $salesinvoicedata['thispayment']; ?></td>
+                                            <td align="right">Rs. <?php echo $salesinvoicedata['balance']; ?></td>
+                                            <td align="center"><?php echo $salesinvoicedata['status']; ?></td>
+                                            <td style="color:#06F;"><a href="printinvoice.php?invoiceid=<?php echo $salesinvoicedata['invoiceid'];?>"><img src="../images/printer.png" /> </a></td>
+                                            <td style="color:#900;"><a href="deleteinvoice.php?invoiceid=<?php echo $salesinvoicedata['invoiceid'];?>"><img src="../images/delete.png" /></a></td>
+                                        </tr>
+                                    <?php
+											}
+										}
+									?>
+									
+                                </table>
+							<?php
+                            }
+							elseif(isset($_GET['invoice']) and ($_GET['invoice']=='service'))
 							{
 						?>
                         	<table border="0" width="100%" cellpadding="0" cellspacing="0">

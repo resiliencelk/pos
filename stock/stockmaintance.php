@@ -112,7 +112,7 @@
             	<div class="row-container">
                     <div class="sytem-text">Date</div>
                     <div class="system-text-box">
-                    	<input type="date" name="date" class="" value="<?php  echo date('d'.'/'.'m'.'/'.'Y');?>" />
+                    	<input type="date" name="date" class="" value="<?php  echo date('Y'.'-'.'m'.'-'.'d');?>" />
                     </div>
                  </div>
                  <div class="row-container">

@@ -1,14 +1,13 @@
 <?php
-
 	require_once("../includes/_handledatabase.inc");
 	require_once("../includes/pathfiles.inc");
 	if($_SESSION['permgrant']==false)
 	{
 		header("location:../index.php");
 	}
-	
 	$dabasehandle=new _handledatabase();
 	$dabasehandle->_connectHost();
+	$action=$_GET['action'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -173,6 +172,9 @@ if(isset($_GET['invoiceid'])){
 ?>
     <div id="parentbody">
     <!-- Header row !-->
+    	<div class="printrow" style="margin:0px 0px 5px 0px; background:#CCC; text-align:center;">
+        	<?php if($action=="View"){ ?> <a href="../main/main.php">BACK</a><?php } ?>
+        </div>
         <div class="printrow">
             <div class="date">
                 <?php echo $headerdatas['invoiceid']; ?>
@@ -231,10 +233,10 @@ if(isset($_GET['invoiceid'])){
                     <?php echo $itemdatas['quantity']; ?>
                 </div>
                 <div class="unitprice">
-                    <?php echo "Rs.".number_format($itemdatas['unitprice'],2,',',','); ?>
+                    <?php echo "Rs.".number_format($itemdatas['unitprice'],2,'.',','); ?>
                 </div>
                 <div class="totalamount">
-                    <?php echo "Rs.".number_format($itemdatas['total'],2,',',','); ?>
+                    <?php echo "Rs.".number_format($itemdatas['total'],2,'.',','); ?>
                 </div>
                </div>
              <?php
@@ -254,7 +256,7 @@ if(isset($_GET['invoiceid'])){
                     	Advance paid :
                     </div>
                     <div style="float:left;width:50%">
-                    	<?php echo "Rs.".number_format($headerdatas['advance'],2,',',','); ?>
+                    	<?php echo "Rs.".number_format($headerdatas['advance'],2,'.',','); ?>
                     </div>
                 </div>
                 <div style="float:left;width:100%; border-top:solid 1px #000000;border-bottom:solid 1px #000000;">
@@ -262,7 +264,7 @@ if(isset($_GET['invoiceid'])){
                     	Balance :
                     </div>
                     <div style="float:left;width:50%">
-                    	<?php echo "Rs.".number_format($headerdatas['balance'],2,',',','); ?>
+                    	<?php echo "Rs.".number_format($headerdatas['balance'],2,'.',','); ?>
                     </div>
                 </div>
             </div>
@@ -273,16 +275,16 @@ if(isset($_GET['invoiceid'])){
        
         <!-- footer row !-->
         <div class="footerrow">
-        	<?php echo "Rs.".number_format($headerdatas['nettotal'],2,',',','); ?>
+        	<?php echo "Rs.".number_format($headerdatas['nettotal'],2,'.',','); ?>
         </div>
          <div class="footerrow">
-        	<?php echo "Rs.".number_format($headerdatas['discounts'],2,',',','); ?>
+        	<?php echo "Rs.".number_format($headerdatas['discounts'],2,'.',','); ?>
         </div>
         <div class="footerrow">
-        	<?php echo "Rs.".number_format($headerdatas['vat'],2,',',','); ?>
+        	<?php echo "Rs.".number_format($headerdatas['vat'],2,'.',','); ?>
         </div>
         <div class="footerrow">
-        	<?php echo "Rs.".number_format($headerdatas['grandtotal'],2,',',','); ?>
+        	<?php echo "Rs.".number_format($headerdatas['grandtotal'],2,'.',','); ?>
         </div>
     </div>
 
@@ -309,6 +311,8 @@ unset($_SESSIN['nettotal']);
 
 ?>
 <script language="javascript" type="text/javascript">
+<?php if($action!="View"){ ?>
 	PrintContent();
 	window.location="index.php";
+<?php }?>
 </script>

@@ -64,18 +64,25 @@ function delete_records()
 								elseif(isset($_POST['action'])and($_POST['action']=="Edit"))
 								{
 									if(isset($_POST['status'])){$status=$_POST['status'];}
-									
 									echo $dabasehandle->_recordInsertion("UPDATE _issuecheque SET issuedate='$issuedate',chequedate='$chequedate',payto='$payto',amount='$amount',issuetype='$chequetype',review='$review',status='$status' WHERE chequeno='$chequeno'","UPDATED SUCCESSFULLY","ERROR IN UPDATE");
-									
-									if($status=="2"||$status==2)
-									{
-										$dabasehandle->_invisibleRecordInsertion("INSERT INTO _transactions (transactiondate,description,amount,catagory,account) VALUES('$chequedate','$payto-$chequeno','$amount','2','2')");
-									}
-									/*if($status=="5"||$status==5)
-									{
-										$dabasehandle->_invisibleRecordInsertion("INSERT INTO _transactions (transactiondate,description,amount,catagory,account) VALUES('$chqdate','$payto-$chequeno','$amount','5','5')");
-									}*/
 								}
+							}
+							
+							if(isset($_POST['updateissue']))
+							{
+								if(isset($_POST['chequeid'])){$chequeid=$_POST['chequeid'];}
+								if(isset($_POST['paidto'])){$paidto=$_POST['paidto'];}
+								if(isset($_POST['amount'])){$amount=$_POST['amount'];}
+								if(isset($_POST['chqdate'])){$chqdate=$_POST['chqdate'];}
+								
+								if(isset($_POST['status'])){$status=$_POST['status'];}
+								echo $dabasehandle->_recordInsertion("UPDATE _issuecheque SET status='$status' WHERE chequeno='$chequeid'","UPDATED SUCCESSFULLY","ERROR IN UPDATE");
+								
+								if($status=="2"||$status==2)
+								{
+								$dabasehandle->_invisibleRecordInsertion("INSERT INTO _transactions (transactiondate,description,amount,catagory,account) VALUES('$chqdate','$paidto-$chequeid','$amount','2','2')");
+								}
+								
 							}
 						?>
                  </div>
@@ -84,15 +91,16 @@ function delete_records()
                     <table width="100%" border="0" cellspacing="5" cellpadding="5">
                       <tr style="color:#333; font-weight:normal;">
                         <th width="4%" align="center">No</th>
-                        <th width="10%" align="center">Cheque No</th>
-                        <th width="11%" align="center">Issue Date  (Y-M-D)</th>
-                        <th width="11%" align="center">Cheque Date (Y-M-D)</th>
-                        <th width="12%" align="center">Pay To</th>
+                        <th width="12%" align="center">Cheque No</th>
+                        <th width="12%" align="center">Issue Date  (Y-M-D)</th>
+                        <th width="12%" align="center">Cheque Date (Y-M-D)</th>
+                        <th width="14%" align="center">Pay To</th>
                         <th width="10%" align="center">Amount</th>
                         <th width="12%" align="center">Type</th>
                         <th width="12%" align="center">Review</th>
-                        <th width="7%" align="center">Action</th>
-                        <th width="7%" align="center"></th>
+                        <th width="8%" align="center">Action</th>
+                        <td></td>
+                        <td></td>
                       </tr>
                       <tr>
                         <td></td>
@@ -111,18 +119,8 @@ function delete_records()
                             </select>
                         </td>
                         <td><input class="s-textbox"type="text" name="review" value="<?php if(isset($_GET['chequeno'])){ echo $dabasehandle->_getInfo("SELECT review FROM _issuecheque WHERE chequeno='".$_GET['chequeno']."'","review");} ?>" /></td>
-                        <td>
-                        <select class="s-textbox" name="status">
-                            <option value="1" <?php if(isset($_GET['chequeno'])){ $stat=$dabasehandle->_getInfo("SELECT status FROM _issuecheque WHERE chequeno='".$_GET['chequeno']."'","status");} if($stat==1){?>selected="selected" <?php } ?> title="Pending">Pnd</option>
-                            <option value="2" <?php if(isset($_GET['chequeno'])){ $stat=$dabasehandle->_getInfo("SELECT status FROM _issuecheque WHERE chequeno='".$_GET['chequeno']."'","status");} if($stat==2){?>selected="selected" <?php } ?> title="Passed">Ps</option>
-                            <option value="3" <?php if(isset($_GET['chequeno'])){ $stat=$dabasehandle->_getInfo("SELECT status FROM _issuecheque WHERE chequeno='".$_GET['chequeno']."'","status");} if($stat==3){?>selected="selected" <?php } ?> title="Stopped">St</option>
-                            <option value="4" <?php if(isset($_GET['chequeno'])){ $stat=$dabasehandle->_getInfo("SELECT status FROM _issuecheque WHERE chequeno='".$_GET['chequeno']."'","status");} if($stat==4){?>selected="selected" <?php } ?> title="Returned">Rt</option>
-                            <option value="5" <?php if(isset($_GET['chequeno'])){ $stat=$dabasehandle->_getInfo("SELECT status FROM _issuecheque WHERE chequeno='".$_GET['chequeno']."'","status");} if($stat==5){?>selected="selected" <?php } ?> title="Re-paid">Rpd</option>
-                        
-                        </select></td><td>
-                        <input type="submit" name="btnadd" class="save-btn" value="" <?php if(isset($_GET['action'])and($_GET['action']=="Edit")){ ?>class="editbutton"<?php }else{ ?>class="addbutton"<?php } ?> /></td>
-                        <td>
-                        </td>
+                        <td><input type="submit" name="btnadd" class="save-btn" value="" <?php if(isset($_GET['action'])and($_GET['action']=="Edit")){ ?>class="editbutton"<?php }else{ ?>class="addbutton"<?php } ?> /></td>
+                        <td></td>
                       </tr>
                     </table>
                     </form>
@@ -140,19 +138,35 @@ function delete_records()
 								{
 									$status=$issuedchequedata['status'];
 							?>
-						
+						<form name="chequestatus" method="post" action="issuecheque.php">
+                    
                         <tr style="color:#<?php if($status==1){ echo '09F';}elseif($status==2){ echo '060';}elseif($status==3){ echo 'F90';}elseif($status==4){ echo '900';} ?>">
                         	<td width="4%" align="center"><?php echo $x; ?></td>
-                            <td width="12%" align="center"><?php echo $issuedchequedata['chequeno'];?></td>
-                            <td width="12%" align="center"><?php echo $issuedchequedata['issuedate'];?></td>
+                            <td width="11%" align="center"><?php echo $issuedchequedata['chequeno'];?></td>
+                            <td width="11%" align="center"><?php echo $issuedchequedata['issuedate'];?></td>
                             <td width="11%" align="center"><?php echo $issuedchequedata['chequedate'];?></td>
-                            <td width="13%" align="center"><?php echo $issuedchequedata['payto'];?></td>
+                            <td width="11%" align="center"><?php echo $issuedchequedata['payto'];?></td>
                             <td width="11%" align="right"><?php echo $issuedchequedata['amount'];?></td>
                             <td width="11%" align="center"><?php echo $issuedchequedata['issuetype'];?></td>
-                            <td width="12%" align="center"><?php echo $issuedchequedata['review'];?></td>
+                            <td width="10%" align="center"><?php echo $issuedchequedata['review'];?></td>
+                        	<td width="6%" align="right">
+                                <input type="hidden" name="chequeid" value="<?php echo $issuedchequedata['chequeno'];?>" />
+                                <input type="hidden" name="paidto" value="<?php echo $issuedchequedata['payto'];?>" />
+                                <input type="hidden" name="amount" value="<?php echo $issuedchequedata['amount'];?>" />
+                                <input type="hidden" name="chqdate" value="<?php echo $issuedchequedata['chequedate'];?>" />
+                                
+                                <select class="s-textbox" name="status">
+                                    <option value="1" <?php if($issuedchequedata['status']==1){?>selected="selected" <?php } ?>>Pnd</option>
+                                    <option value="2" <?php if($issuedchequedata['status']==2){?>selected="selected" <?php } ?>>Ps</option>
+                                    <option value="3" <?php if($issuedchequedata['status']==3){?>selected="selected" <?php } ?>>St</option>
+                                    <option value="4" <?php if($issuedchequedata['status']==4){?>selected="selected" <?php } ?>>Rt</option>
+                                </select>
+                            </td>
+                            <td width="6%" align="right"><input type="submit" name="updateissue" value="" class="reset-btn" /></td>
                             <td width="18%" align="center"><a href="issuecheque.php?chequeno=<?php echo $issuedchequedata['chequeno']; ?>&action=Edit"><img src="../images/edit.png" /></a>&nbsp;&nbsp;<a href="deleteissuecheque.php?chequeno=<?php echo $issuedchequedata['chequeno']; ?>" onclick="return delete_records();"><img src="../images/delete.png" /></a>
                             </td>
                         </tr>
+                        </form>
                         <?php
 								$x++;
 								}

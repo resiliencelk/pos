@@ -200,7 +200,7 @@
                                     $yr=date('y');
                                     $ivid='RES'.$mo.$da.$yr;
                                 ?>
-                                    <input type="date" name="invoicedate" value="<?php echo date('d'.'/'.'m'.'/'.'Y'); ?>" class="s-textbox"/>
+                                    <input type="date" name="invoicedate" value="<?php echo date('Y'.'-'.'m'.'-'.'d'); ?>" class="s-textbox"/>
                                 </div>
                             </div>
                             <div class="row-container" >

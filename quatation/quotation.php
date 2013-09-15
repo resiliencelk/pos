@@ -237,7 +237,7 @@
                                     $yr=date('y');
                                     $ivid='QUO'.$mo.$da.$yr;
                                 ?>
-                                    <input type="date" name="quotationdate" value="<?php echo date('d'.'/'.'m'.'/'.'Y'); ?>" class="s-textbox"/>
+                                    <input type="date" name="quotationdate" value="<?php echo date('Y'.'-'.'m'.'-'.'d'); ?>" class="s-textbox"/>
                                 </div>
                             </div>
                             <div class="row-container" style="border-bottom:1px dashed #CCCCCC;">

@@ -79,7 +79,7 @@ if(isset($_POST['deleteitem'])){
 	$itmid=$_POST['itmid'];
 	$invid=$_POST['invonum'];
 	
-	echo "DELETE FROM _invoiceitems WHERE itemid='$invid' AND invoiceid='$invid'";
+	//echo "DELETE FROM _invoiceitems WHERE itemid='$invid' AND invoiceid='$invid'";
 	$dabasehandle->_invisibleRecordInsertion("DELETE FROM _invoiceitems WHERE itemid='$itmid' AND invoiceid='$invid'");
 }
 ?>
@@ -153,13 +153,13 @@ if(isset($_POST['deleteitem'])){
                         
                         $dabasehandle->_invisibleRecordInsertion("INSERT INTO _invoice (invoiceid,invoicedate,paymentmode,customerid,customername,customeraddress,customertelnumber,nettotal,discounts,vat,grandtotal,advance,balance,status,type) VALUES('$invoicenumber','$invoicedate','$pymode','$customerid','$name','$address','$contactnumber','$nettotal','$discouts','0','$grandtotal','$advance','$balance','$status','1')");
 						
-						echo $pymode;
+						//echo $pymode;
 						
 						if($pymode=="1"||$pymode==1)
                         {
 						$dabasehandle->_invisibleRecordInsertion("INSERT INTO _transactions (transactiondate,description,amount,catagory,account) VALUES('$invoicedate','$invoicenumber','$grandtotal','1','$pymode')");
 						}
-						elseif($pymode=="3"||$pymode==3)
+						elseif(($pymode=="3"||$pymode==3) ||($pymode=="2"||$pymode==2))
                         {
 						$dabasehandle->_invisibleRecordInsertion("INSERT INTO _transactions (transactiondate,description,amount,catagory,account) VALUES('$invoicedate','$invoicenumber','$advance','1','$pymode')");
 						}
@@ -283,7 +283,7 @@ if(isset($_POST['deleteitem'])){
                                     $yr=date('y');
                                     $ivid='RES'.$mo.$da.$yr;
                                 ?>
-                                    <input type="date" name="invoicedate" value="<?php echo date('d'.'/'.'m'.'/'.'Y'); ?>" class="s-textbox"/>
+                                    <input type="date" name="invoicedate" value="<?php echo date('Y'.'-'.'m'.'-'.'d'); ?>" class="s-textbox"/>
                                 </div>
                             </div>
                             <div class="row-container">
@@ -291,7 +291,7 @@ if(isset($_POST['deleteitem'])){
                                     Invoice number
                                 </div>
                                 <div class="system-textbox">
-                                    <input type="text" name="invoicenumber" class="s-textbox" value="<?php $invdate=date('d'.'/'.'m'.'/'.'Y'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _invoice where invoicedate='$invdate'","$ivid","id"); ?>" />
+                                    <input type="text" name="invoicenumber" class="s-textbox" value="<?php $invdate=date('Y'.'-'.'m'.'-'.'d'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _invoice where invoicedate='$invdate'","$ivid","id"); ?>" />
                                 </div>
                             </div>
                             <div class="row-container">
@@ -463,7 +463,7 @@ if(isset($_POST['deleteitem'])){
                           <td><input type="text" name="serialno" value=""/></td>
                           <td><input type="text" name="description" value="<?php if( isset($_SESSION['itemname'])){ echo $_SESSION['itemname']; } if(isset($_SESSION['warranty']) and($_SESSION['warranty']>0)){ echo" (".$_SESSION['warranty']." Months)";} ?>"/></td>
                           <td><input type="text" name="quantity" value="" onblur="cal_total();"/></td>
-                          <td><input type="text" name="salesprice" value="<?php if( isset($_SESSION['salesprice'])){ echo number_format($_SESSION['salesprice'], 2, '.', ''); } ?>" style="text-align:right;"/></td>
+                          <td><input type="text" name="salesprice" value="<?php if( isset($_SESSION['salesprice'])){ echo number_format($_SESSION['salesprice'], 2, '.', ''); } ?>" style="text-align:right;" onblur="cal_total();"/></td>
                           <td>
                           <input type="text" name="totalprice" value="" width="60%" style="text-align:right;"/>&nbsp;<input type="submit" name="saveitems" value=""width="35%" class="addbutton" title="Add Record"/></td>
                           <td></td>
@@ -503,10 +503,13 @@ if(isset($_POST['deleteitem'])){
                             <td align="right">
                                 <?php echo number_format($invoiceditemdatas['total'],2,',',','); ?>
                             </td>
-                            <td><form name="deleteinvoice" method="post" action="invoice.php"
-                            ><input type="text" name="itmid" value="<?php echo $invoiceditemdatas['itemid']; ?>" />
-                            <input type="text" name="invonum" value="<?php $invdate=date('d'.'/'.'m'.'/'.'Y'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _invoice where invoicedate='$invdate'","$ivid","id"); ?>" />
-                                <input type="submit" name="deleteitem" value="del" /></form></td>
+                            <td>
+                            	<form name="deleteinvoice" method="post" action="invoice.php">
+                                    <input type="hidden" name="itmid" value="<?php echo $invoiceditemdatas['itemid']; ?>" />
+                                    <input type="hidden" name="invonum" value="<?php $invdate=date('Y'.'-'.'m'.'-'.'d'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _invoice where invoicedate='$invdate'","$ivid","id"); ?>" />
+                                    <input type="submit" name="deleteitem" value="del" />
+                             	</form>
+                            </td>
                         </tr>
                         <?php
                                 }

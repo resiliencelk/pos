@@ -90,7 +90,10 @@
                         if(isset($_POST['quantity'])){$quantity=$_POST['quantity'];}
                         if(isset($_POST['unitprice'])){$unitprice=$_POST['unitprice'];}
                         if(isset($_POST['totalprice'])){$totalprice=$_POST['totalprice'];}
-                        
+                        if($itemid=="")
+						{
+							$itemid="nill";
+						}
                         $dabasehandle->_invisibleRecordInsertion("INSERT INTO _purchaseordereditems (orderid,itemid,modelnumber,description,quantity,unitprice,total) VALUES('$orderid','$itemid','$modelno','$description','$quantity','$unitprice','$totalprice')");
 						
 						unset($_SESSION['catagory']);
@@ -237,7 +240,7 @@
                                     $yr=date('y');
                                     $ivid='ORD'.$mo.$da.$yr;
                                 ?>
-                                    <input type="date" name="orderdate" value="<?php echo date('d'.'/'.'m'.'/'.'Y'); ?>" class="s-textbox"/>
+                                    <input type="date" name="orderdate" value="<?php echo date('Y'.'-'.'m'.'-'.'d'); ?>" class="s-textbox"/>
                                 </div>
                             </div>
                             <div class="row-container" style="border-bottom:1px dashed #CCCCCC;">
@@ -245,7 +248,7 @@
                                     Order ID
                                 </div>
                                 <div class="system-textbox">
-                                    <input type="text" name="orderid" class="s-textbox" value="<?php $orddate=date('d'.'/'.'m'.'/'.'Y'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _purchaseorder WHERE orderdate='$orddate'","$ivid","id"); ?>" />
+                                    <input type="text" name="orderid" class="s-textbox" value="<?php $orddate=date('Y'.'-'.'m'.'-'.'d'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _purchaseorder WHERE orderdate='$orddate'","$ivid","id"); ?>" />
                                 </div>
                             </div>
                             

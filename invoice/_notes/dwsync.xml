@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
 <file name="deleteinvoice.php" server="resiliencelk.com//pos/" local="130223628000000000" remote="130223628000000000" Dst="0" />
-<file name="credit-invoice.php" server="resiliencelk.com//pos/" local="130227579446075485" remote="130227165000000000" Dst="0" />
-<file name="printcreditinvoice.php" server="resiliencelk.com//pos/" local="130227611509577870" remote="130227197400000000" Dst="0" />
+<file name="credit-invoice.php" server="resiliencelk.com//pos/" local="130228278439479683" remote="130227864600000000" Dst="0" />
+<file name="printcreditinvoice.php" server="resiliencelk.com//pos/" local="130234598397554914" remote="130234191600000000" Dst="0" />
+<file name="invoice.php" server="resiliencelk.com//pos/" local="130234331031693499" remote="130233916800000000" Dst="0" />
+<file name="printquotationinvoice.php" server="resiliencelk.com//pos/" local="130228317873665962" remote="130227903600000000" Dst="0" />
+<file name="printinvoice.php" server="resiliencelk.com//pos/" local="130234601660898038" remote="130234187400000000" Dst="0" />
+<file name="printserviceinvoice.php" server="resiliencelk.com//pos/" local="130224220839627450" remote="130227905400000000" Dst="0" />
+<file name="quotationinvoice.php" server="resiliencelk.com//pos/" local="130232652951385667" remote="130232238600000000" Dst="0" />
+<file name="service-invoice.php" server="resiliencelk.com//pos/" local="130232651666957063" remote="130232237400000000" Dst="0" />
+<file name="view-invoice.php" server="resiliencelk.com//pos/" local="130234744968708841" remote="130234330800000000" Dst="0" />
 </dwsync>

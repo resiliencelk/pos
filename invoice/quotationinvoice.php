@@ -61,6 +61,15 @@
 </head>
 
 <body>
+<?php
+if(isset($_POST['deleteitem'])){
+	$itmid=$_POST['itmid'];
+	$invid=$_POST['invonum'];
+	
+	//echo "DELETE FROM _quotationitems WHERE itemid='$invid' AND invoiceid='$invid'";
+	$dabasehandle->_invisibleRecordInsertion("DELETE FROM _quotationitems WHERE itemid='$itmid' AND quotationid='$invid'");
+}
+?>
 <div id="main-container">
     <div class="row-container">
         <?php require("../header.php"); ?>
@@ -240,7 +249,7 @@
                                     $yr=date('y');
                                     $ivid='QUO'.$mo.$da.$yr;
                                 ?>
-                                    <input type="date" name="invoicedate" value="<?php echo date('d'.'/'.'m'.'/'.'Y'); ?>" class="s-textbox"/>
+                                    <input type="date" name="invoicedate" value="<?php echo date('Y'.'-'.'m'.'-'.'d'); ?>" class="s-textbox"/>
                                 </div>
                             </div>
                             <div class="row-container" >
@@ -248,7 +257,7 @@
                                     Invoice number
                                 </div>
                                 <div class="system-textbox">
-                                    <input type="text" name="invoicenumber" class="s-textbox" value="<?php $invdate=date('d'.'/'.'m'.'/'.'Y'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _quotation where quotationdate='$invdate'","$ivid","id"); ?>" />
+                                    <input type="text" name="invoicenumber" class="s-textbox" value="<?php $invdate=date('Y'.'-'.'m'.'-'.'d'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _quotation where quotationdate='$invdate'","$ivid","id"); ?>" />
                                 </div>
                             </div>
                             <div class="row-container" >
@@ -417,7 +426,7 @@
                           <td><input type="text" name="modelno" value="<?php if( isset($_SESSION['modelnumber'])){ echo $_SESSION['modelnumber']; } ?>"/></td>
                           <td><input type="text" name="description" value="<?php if( isset($_SESSION['itemname'])){ echo $_SESSION['itemname']; } if(isset($_SESSION['warranty']) and($_SESSION['warranty']>0)){ echo" (".$_SESSION['warranty']." Months)";} ?>"/></td>
                           <td><input type="text" name="quantity" value="" onblur="cal_total();"/></td>
-                          <td><input type="text" name="salesprice" value="<?php if( isset($_SESSION['salesprice'])){ echo number_format($_SESSION['salesprice'], 2, '.', ''); } ?>" style="text-align:right;"/></td>
+                          <td><input type="text" name="salesprice" value="<?php if( isset($_SESSION['salesprice'])){ echo number_format($_SESSION['salesprice'], 2, '.', ''); } ?>" style="text-align:right;" onblur="cal_total();"/></td>
                           <td>
                           	<table width="100%" border="0" cellspacing="0" cellpadding="0">
                               <tr>
@@ -455,10 +464,17 @@
                                 <?php echo $invoiceditemdatas['quantity']; ?>
                             </td>
                             <td align="right">
-                                <?php echo number_format($invoiceditemdatas['unitprice'],2,',',','); ?>
+                                <?php echo number_format($invoiceditemdatas['unitprice'],2,'.',','); ?>
                             </td>
                             <td align="right">
-                                <?php echo number_format($invoiceditemdatas['total'],2,',',','); ?>
+                                <?php echo number_format($invoiceditemdatas['total'],2,'.',','); ?>
+                            </td>
+                            <td>
+                            	<form name="deleteinvoice" method="post" action="quotationinvoice.php">
+                                    <input type="hidden" name="itmid" value="<?php echo $invoiceditemdatas['itemid']; ?>" />
+                                    <input type="hidden" name="invonum" value="<?php $invdate=date('Y'.'-'.'m'.'-'.'d'); echo $dabasehandle->_newGeneration("SELECT COUNT(id) AS id from _quotation where quotationdate='$invdate'","$ivid","id"); ?>" />
+                                    <input type="submit" name="deleteitem" value="del" />
+                             	</form>
                             </td>
                         </tr>
                         <?php

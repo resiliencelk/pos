@@ -9,6 +9,7 @@
 	
 	$dabasehandle=new _handledatabase();
 	$dabasehandle->_connectHost();
+	//$action=$_GET['action'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -188,7 +189,7 @@ function PrintContent() {
 <body>
 <?php
 $invoiceid;
-$invoicedate=date('d'.'/'.'m'.'/'.'Y');
+$invoicedate=date('Y'.'-'.'m'.'-'.'d');
 if(isset($_GET['invoiceid'])){
 	$invoiceid=$_GET['invoiceid'];
 	$headerdetails="SELECT * FROM _creditinvoice WHERE invoiceid='$invoiceid' AND invoicedate='$invoicedate'";

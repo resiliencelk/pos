@@ -106,7 +106,7 @@
                             Date
                             </div>
                             <div class="system-textbox">
-                            <input type="date" name="date" class="s-textbox" value="<?php  echo date('d'.'/'.'m'.'/'.'Y');?>" />
+                            <input type="date" name="date" class="s-textbox" value="<?php  echo date('Y'.'-'.'m'.'-'.'d');?>" />
                             </div>
                         </div>
                         <div class="row-container">
